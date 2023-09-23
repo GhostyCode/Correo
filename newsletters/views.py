@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.conf import settings
-from django.core.checks import messages
+from django.contrib import messages
 from newsletters.models import NewsletterUser
 from .forms import NewsletterUserSignUpForm
 from django.template.loader import render_to_string
@@ -16,14 +16,14 @@ def newsletter_signup(request):
 
         else:
             instance.save()
-            messages.success(request, 'Hemos enviado un correo electronico a su correo, abrelo para continuar con el proceso')
+            messages.success(request, 'Hemos enviado un correo electronico a su correo, abrelo para continuar con la subscripción')
 
             #CorreoElectronico
             subject="Libro de programación"
             from_email=settings.EMAIL_HOST_USER
             to_email=[instance.email]
 
-            html_template='newsletter/email_templates/welcome.html'
+            html_template='newsletter/welcome.html'
             html_message=render_to_string(html_template)
             message=EmailMessage(subject, html_message, from_email, to_email)
             message.content_subtype='html'
@@ -52,4 +52,4 @@ def newsletter_unsubscribe(request):
         'form':form,
     }
 
-    return render(request, 'newsletter/unsubscribe.html', context)
+    return render(request, 'unsubscribe.html', context)
